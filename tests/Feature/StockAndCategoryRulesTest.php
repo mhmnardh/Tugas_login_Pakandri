@@ -12,6 +12,13 @@ class StockAndCategoryRulesTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withSession(['user_id' => 1]);
+    }
+
     public function test_deleting_category_keeps_books(): void
     {
         $kategori = Kategori::create(['nama_kategori' => 'Novel']);

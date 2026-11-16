@@ -17,20 +17,12 @@ class MemberController extends Controller
 
     public function create()
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $bukuTersedia = Buku::where('stok', '>', 0)->get();
         return view('member.create', compact('bukuTersedia'));
     }
 
     public function store(Request $request)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $request->validate([
             'buku_id'       => ['required', 'exists:buku,id', function ($attribute, $value, $fail) {
                 $buku = Buku::find($value);
@@ -59,10 +51,6 @@ class MemberController extends Controller
 
     public function edit(Member $member)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $bukuTersedia = Buku::where('stok', '>', 0)->get();
 
         if ($member->buku_id) {
@@ -78,10 +66,6 @@ class MemberController extends Controller
 
     public function update(Request $request, Member $member)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $request->validate([
             'buku_id'       => ['required', 'exists:buku,id', function ($attribute, $value, $fail) use ($member) {
                 if ($member->buku_id == $value) {
@@ -117,10 +101,6 @@ class MemberController extends Controller
 
     public function destroy(Member $member)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         if ($member->foto_member) {
             Storage::disk('public')->delete($member->foto_member);
         }

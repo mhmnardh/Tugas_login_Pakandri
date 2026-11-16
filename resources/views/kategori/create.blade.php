@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(session()->has('user_id') ? 'layouts.admin' : 'layouts.app')
 
 @section('title', 'Tambah Kategori')
 

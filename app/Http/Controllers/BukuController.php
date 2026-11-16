@@ -17,20 +17,12 @@ class BukuController extends Controller
 
     public function create()
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $kategori = Kategori::all();
         return view('buku.create', compact('kategori'));
     }
 
     public function store(Request $request)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $request->validate([
             'kategori_id' => 'required|exists:kategori,id',
             'nama_buku'   => 'required|string|max:255',
@@ -52,20 +44,12 @@ class BukuController extends Controller
 
     public function edit(Buku $buku)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $kategori = Kategori::all();
         return view('buku.edit', compact('buku', 'kategori'));
     }
 
     public function update(Request $request, Buku $buku)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $request->validate([
             'kategori_id' => 'required|exists:kategori,id',
             'nama_buku'   => 'required|string|max:255',
@@ -90,10 +74,6 @@ class BukuController extends Controller
 
     public function destroy(Buku $buku)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         if ($buku->foto_buku) {
             Storage::disk('public')->delete($buku->foto_buku);
         }

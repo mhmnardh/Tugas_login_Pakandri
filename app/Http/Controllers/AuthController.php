@@ -10,15 +10,10 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function __construct()
-    {
-        // tidak ada pemeriksaan login di sini agar halaman login tetap bisa dibuka
-    }
-
     public function showLoginForm(): View|RedirectResponse
     {
         if (session()->has('user_id')) {
-            return redirect()->route('kategori.index');
+            return redirect()->route('admin.dashboard');
         }
 
         return view('auth.login');
@@ -44,7 +39,7 @@ class AuthController extends Controller
             'user_name' => $user->name,
         ]);
 
-        return redirect()->route('kategori.index');
+        return redirect()->route('admin.dashboard');
     }
 
     public function logout(Request $request): RedirectResponse
@@ -53,6 +48,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('class.index');
     }
 }

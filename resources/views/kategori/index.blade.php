@@ -1,14 +1,19 @@
-@extends('layouts.app')
+@extends(session()->has('user_id') ? 'layouts.admin' : 'layouts.app')
 
 @section('title', 'Daftar Kategori')
 
 @section('content')
     <main>
-        <section class="py-5 text-center container">
+        <section class="text-center container">
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <h1 class="fw-light">Daftar Kategori</h1>
                     <p class="lead text-body-secondary">Kelola kategori buku sesuai kebutuhan perpustakaan Anda.</p>
+                    @if (!session('user_id'))
+                        <a href="{{ route('kategori.create') }}" class="btn btn-primary my-2">
+                            <i class="bi bi-plus-lg"></i> Yukk login untuk tambah Kategori Baru
+                        </a>
+                    @endif
                     @if (session('user_id'))
                         <p>
                             <a href="{{ route('kategori.create') }}" class="btn btn-primary my-2">
@@ -20,7 +25,7 @@
             </div>
         </section>
 
-        <div class="album py-5 bg-body-tertiary">
+        <div class="album bg-body-tertiary">
             <div class="container">
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">

@@ -15,19 +15,11 @@ class KategoriController extends Controller
 
     public function create()
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         return view('kategori.create');
     }
 
     public function store(Request $request)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $request->validate([
             'nama_kategori' => 'required|string|max:255',
         ]);
@@ -39,19 +31,11 @@ class KategoriController extends Controller
 
     public function edit(Kategori $kategori)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         return view('kategori.edit', compact('kategori'));
     }
 
     public function update(Request $request, Kategori $kategori)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $request->validate([
             'nama_kategori' => 'required|string|max:255',
         ]);
@@ -63,10 +47,6 @@ class KategoriController extends Controller
 
     public function destroy(Kategori $kategori)
     {
-        if ($redirect = $this->requireAdmin()) {
-            return $redirect;
-        }
-
         $kategori->buku()->update(['kategori_id' => null]);
         $kategori->delete();
 

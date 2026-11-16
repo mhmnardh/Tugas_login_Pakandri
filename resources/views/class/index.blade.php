@@ -9,6 +9,7 @@
         <p>
 
         <div class="d-grid gap-2">
+            <img src="" alt="">
             <a class="btn btn-primary" href="{{ route('kategori.index') }}" role="button">Lihat Buku</a>
         </div>
 
