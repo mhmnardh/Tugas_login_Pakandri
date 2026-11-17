@@ -11,13 +11,15 @@ class BukuController extends Controller
 {
     public function index()
     {
-        $buku = Buku::with(['kategori', 'member'])->latest()->get();
+        $buku = Buku::with('kategori')->latest()->get();
+
         return view('buku.index', compact('buku'));
     }
 
     public function create()
     {
         $kategori = Kategori::all();
+
         return view('buku.create', compact('kategori'));
     }
 
@@ -25,10 +27,10 @@ class BukuController extends Controller
     {
         $request->validate([
             'kategori_id' => 'required|exists:kategori,id',
-            'nama_buku'   => 'required|string|max:255',
-            'isbn'        => 'required|string|max:50',
-            'stok'        => 'required|integer|min:0',
-            'foto_buku'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'nama_buku' => 'required|string|max:255',
+            'isbn' => 'required|string|max:50',
+            'stok' => 'required|integer|min:0',
+            'foto_buku' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $data = $request->all();
@@ -45,6 +47,7 @@ class BukuController extends Controller
     public function edit(Buku $buku)
     {
         $kategori = Kategori::all();
+
         return view('buku.edit', compact('buku', 'kategori'));
     }
 
@@ -52,10 +55,10 @@ class BukuController extends Controller
     {
         $request->validate([
             'kategori_id' => 'required|exists:kategori,id',
-            'nama_buku'   => 'required|string|max:255',
-            'isbn'        => 'required|string|max:50',
-            'stok'        => 'required|integer|min:0',
-            'foto_buku'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'nama_buku' => 'required|string|max:255',
+            'isbn' => 'required|string|max:50',
+            'stok' => 'required|integer|min:0',
+            'foto_buku' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $data = $request->all();
@@ -74,6 +77,11 @@ class BukuController extends Controller
 
     public function destroy(Buku $buku)
     {
+        if ($buku->peminjaman()->where('status', 'dipinjam')->exists()) {
+            return redirect()->route('buku.index')
+                ->with('error', 'Buku tidak dapat dihapus selama masih dipinjam.');
+        }
+
         if ($buku->foto_buku) {
             Storage::disk('public')->delete($buku->foto_buku);
         }

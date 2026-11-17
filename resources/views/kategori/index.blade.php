@@ -4,11 +4,11 @@
 
 @section('content')
     <main>
-        <section class="text-center container">
+        <section class="list-heading text-center">
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <h1 class="fw-light">Daftar Kategori</h1>
-                    <p class="lead text-body-secondary">Kelola kategori buku sesuai kebutuhan perpustakaan Anda.</p>
+                    <p class="lead text-body-secondary">Lihat kategori buku yang tersedia di perpustakaan</p>
                     @if (!session('user_id'))
                         <a href="{{ route('kategori.create') }}" class="btn btn-primary my-2">
                             <i class="bi bi-plus-lg"></i> Yukk login untuk tambah Kategori Baru
@@ -34,13 +34,13 @@
                     </div>
                 @endif
 
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3">
                     @forelse ($kategori as $item)
                         <div class="col">
                             <div class="card shadow-sm h-100">
                                 <div
-                                    class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-0 fs-6 fw-bold">{{ $item->nama_kategori }}</h5>
+                                    class="card-header bg-primary text-on-accent d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0 fw-bold">{{ $item->nama_kategori }}</h5>
                                 </div>
 
                                 <div class="card-body">

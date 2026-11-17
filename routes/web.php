@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\EnsureAuthenticated;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MemberController;
-
+use App\Http\Controllers\PeminjamanController;
+use App\Http\Middleware\EnsureAuthenticated;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (session()->has('user_id')) {
@@ -29,6 +29,9 @@ Route::resource('member', MemberController::class)->only('index');
 Route::middleware(EnsureAuthenticated::class)->group(function () {
     Route::get('/admin/dashboard', DashboardController::class)->name('admin.dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::resource('peminjaman', PeminjamanController::class)->only(['index', 'create', 'store']);
+    Route::patch('/peminjaman/{peminjaman}/kembali', [PeminjamanController::class, 'returnBook'])
+        ->name('peminjaman.return');
 
     Route::resource('kategori', KategoriController::class)->except('index');
     Route::resource('buku', BukuController::class)->except('index');

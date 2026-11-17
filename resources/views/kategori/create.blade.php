@@ -8,7 +8,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header bg-primary text-on-accent">
                             <h4 class="mb-0 fs-5">Tambah Kategori</h4>
                         </div>
                         <div class="card-body">

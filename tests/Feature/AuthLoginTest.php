@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Buku;
 use App\Models\Kategori;
 use App\Models\Member;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -17,14 +17,14 @@ class AuthLoginTest extends TestCase
     public function test_user_can_login(): void
     {
         $user = User::create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('secret123'),
+            'name' => 'Muhaimin',
+            'email' => 'muha@gmail.com',
+            'password' => Hash::make('123'),
         ]);
 
         $response = $this->from(route('login'))->post(route('login.submit'), [
-            'email' => 'admin@example.com',
-            'password' => 'secret123',
+            'email' => 'muha@gmail.com',
+            'password' => '123',
         ]);
 
         $response->assertRedirect(route('admin.dashboard'));
@@ -168,5 +168,27 @@ class AuthLoginTest extends TestCase
         $response = $this->get(route('kategori.create'));
 
         $response->assertRedirect(route('login'));
+    }
+
+    public function test_peminjaman_routes_require_login(): void
+    {
+        $this->get(route('peminjaman.index'))
+            ->assertRedirect(route('login'));
+
+        $this->get(route('peminjaman.create'))
+            ->assertRedirect(route('login'));
+    }
+
+    public function test_admin_can_open_peminjaman_pages(): void
+    {
+        $this->withSession(['user_id' => 1, 'user_name' => 'Admin']);
+
+        $this->get(route('peminjaman.index'))
+            ->assertOk()
+            ->assertSee('Peminjaman');
+
+        $this->get(route('peminjaman.create'))
+            ->assertOk()
+            ->assertSee('Catat Peminjaman');
     }
 }

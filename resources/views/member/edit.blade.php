@@ -18,26 +18,6 @@
                                 @method('PUT')
 
                                 <div class="mb-3">
-                                    <label for="buku_id" class="form-label">Buku</label>
-                                    <select class="form-select @error('buku_id') is-invalid @enderror" id="buku_id"
-                                        name="buku_id" required>
-                                        <option value=""
-                                            {{ old('buku_id', $member->buku_id) == null ? 'selected' : '' }}>
-                                            -- Pilih Buku --
-                                        </option>
-                                        @foreach ($bukuTersedia as $item)
-                                            <option value="{{ $item->id }}"
-                                                {{ old('buku_id', $member->buku_id) == $item->id ? 'selected' : '' }}>
-                                                {{ $item->nama_buku }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('buku_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
                                     <label for="nama_member" class="form-label">Nama Member</label>
                                     <input type="text" class="form-control @error('nama_member') is-invalid @enderror"
                                         id="nama_member" name="nama_member"

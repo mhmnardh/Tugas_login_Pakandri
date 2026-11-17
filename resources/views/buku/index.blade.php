@@ -4,11 +4,11 @@
 
 @section('content')
     <main>
-        <section class=" text-center container">
+        <section class="list-heading text-center">
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <h1 class="fw-light">Daftar Buku</h1>
-                    <p class="lead text-body-secondary">Kelola data buku dan stok di perpustakaan Anda.</p>
+                    <p class="lead text-body-secondary">Lihat data buku dan stok yang tersedia di perpustakaan .</p>
                     @if (session('user_id'))
                         <p>
                             <a href="{{ route('buku.create') }}" class="btn btn-primary my-2">
@@ -28,14 +28,17 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+                @if (session('error'))
+                    <div class="alert alert-warning mb-4" role="alert">{{ session('error') }}</div>
+                @endif
 
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3">
                     @forelse ($buku as $item)
                         <div class="col">
                             <div class="card shadow-sm h-100">
                                 <div
-                                    class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-0 fs-6 fw-bold">{{ $item->nama_buku }}</h5>
+                                    class="card-header bg-primary text-on-accent d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0 fw-bold">{{ $item->nama_buku }}</h5>
                                 </div>
 
                                 @if ($item->foto_buku)
@@ -46,8 +49,8 @@
                                         height="225" preserveAspectRatio="xMidYMid slice" role="img" width="100%"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <title>Foto Buku</title>
-                                        <rect width="100%" height="100%" fill="#55595c"></rect>
-                                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text>
+                                        <rect width="100%" height="100%" fill="var(--bg-secondary)"></rect>
+                                        <text x="50%" y="50%" fill="var(--text-secondary)" dy=".3em">No Image</text>
                                     </svg>
                                 @endif
 

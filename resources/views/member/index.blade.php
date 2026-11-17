@@ -4,11 +4,11 @@
 
 @section('content')
     <main>
-        <section class=" text-center container">
+        <section class="list-heading text-center">
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <h1 class="fw-light">Daftar Member</h1>
-                    <p class="lead text-body-secondary">Kelola data member dan buku yang mereka miliki.</p>
+                    <p class="lead text-body-secondary">Lihat data anggota perpustakaan.</p>
                     @if (session('user_id'))
                         <p>
                             <a href="{{ route('member.create') }}" class="btn btn-primary my-2">
@@ -29,12 +29,12 @@
                     </div>
                 @endif
 
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3">
                     @forelse ($member as $item)
                         <div class="col">
                             <div class="card shadow-sm h-100">
-                                <div class="card-header bg-primary text-white">
-                                    <h5 class="card-title mb-0 fs-6 fw-bold">{{ $item->nama_member }}</h5>
+                                <div class="card-header bg-primary text-on-accent">
+                                    <h5 class="card-title mb-0 fw-bold">{{ $item->nama_member }}</h5>
                                 </div>
 
                                 @if ($item->foto_member)
@@ -45,15 +45,12 @@
                                         height="225" preserveAspectRatio="xMidYMid slice" role="img" width="100%"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <title>Foto Member</title>
-                                        <rect width="100%" height="100%" fill="#55595c"></rect>
-                                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">No Image</text>
+                                        <rect width="100%" height="100%" fill="var(--bg-secondary)"></rect>
+                                        <text x="50%" y="50%" fill="var(--text-secondary)" dy=".3em">No Image</text>
                                     </svg>
                                 @endif
 
                                 <div class="card-body">
-                                    <p class="card-text text-muted mb-2">
-                                        <strong>Buku:</strong> {{ $item->buku?->nama_buku ?? 'Belum terhubung' }}
-                                    </p>
                                     <p class="card-text text-muted mb-2">
                                         <strong>Email:</strong> {{ $item->email }}
                                     </p>

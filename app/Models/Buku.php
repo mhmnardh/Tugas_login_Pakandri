@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Buku extends Model
 {
     protected $table = 'buku';
+
     protected $fillable = [
         'kategori_id',
         'nama_buku',
         'isbn',
         'stok',
-        'foto_buku'
+        'foto_buku',
     ];
 
     public function kategori()
@@ -28,5 +29,10 @@ class Buku extends Model
     public function members()
     {
         return $this->hasMany(Member::class, 'buku_id');
+    }
+
+    public function peminjaman()
+    {
+        return $this->hasMany(Peminjaman::class, 'buku_id');
     }
 }
