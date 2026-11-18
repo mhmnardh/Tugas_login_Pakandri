@@ -1,0 +1,49 @@
+databases:
+  - name: perpus-postgres
+    databaseName: perpus
+    user: perpus
+
+services:
+  - type: web
+    name: perpus-muhaimin
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /up
+    preDeployCommand: php artisan migrate --force
+    disk:
+      name: perpus-public-storage
+      mountPath: /var/www/html/storage/app/public
+      sizeGB: 1
+    envVars:
+      - key: APP_NAME
+        value: Perpustakaan Indonesia
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        sync: false
+      - key: APP_KEY
+        generateValue: true
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: warning
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_URL
+        fromDatabase:
+          name: perpus-postgres
+          property: connectionString
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: FILESYSTEM_DISK
+        value: public
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

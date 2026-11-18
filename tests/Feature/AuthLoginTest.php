@@ -60,7 +60,8 @@ class AuthLoginTest extends TestCase
         $this->get(route('public.home'))
             ->assertOk()
             ->assertViewIs('class.index')
-            ->assertSee('Selamat Datang di Perpustakaan Indonesia')
+            ->assertSee('Membuka jendela dunia')
+            ->assertSee('Logout')
             ->assertSessionHas('user_id', 1);
     }
 
@@ -150,7 +151,8 @@ class AuthLoginTest extends TestCase
         $response = $this->get(route('kategori.index'));
 
         $response->assertOk()
-            ->assertSee('Yukk login untuk tambah Kategori Baru');
+            ->assertSee('Daftar Kategori')
+            ->assertDontSee('Tambah Kategori Baru');
     }
 
     public function test_category_login_prompt_is_hidden_for_admin(): void
@@ -159,7 +161,6 @@ class AuthLoginTest extends TestCase
 
         $this->get(route('kategori.index'))
             ->assertOk()
-            ->assertDontSee('Yukk login untuk tambah Kategori Baru')
             ->assertSee('Tambah Kategori Baru');
     }
 

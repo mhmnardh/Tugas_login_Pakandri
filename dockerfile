@@ -58,8 +58,10 @@ WORKDIR /var/www/html
 
 COPY --from=app-build /var/www/html ./
 COPY --from=assets /var/www/html/public/build ./public/build
+COPY scripts/render-start.sh /usr/local/bin/render-start
 
-RUN mkdir -p \
+RUN chmod +x /usr/local/bin/render-start \
+    && mkdir -p \
         storage/app/public \
         storage/framework/cache/data \
         storage/framework/sessions \
@@ -72,4 +74,4 @@ RUN mkdir -p \
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "mkdir -p storage/app/public storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache && chown -R www-data:www-data storage bootstrap/cache && exec apache2-foreground"]
+CMD ["/usr/local/bin/render-start"]

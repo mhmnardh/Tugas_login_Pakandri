@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         $memberForeignKeys = collect(Schema::getForeignKeys('member'))
-            ->where('columns', ['buku_id']);
+            ->filter(fn(array $foreignKey): bool => $foreignKey['columns'] === ['buku_id']);
         $memberIndexes = collect(Schema::getIndexes('member'))
             ->filter(fn(array $index): bool => $index['unique'] && $index['columns'] === ['buku_id']);
         $memberColumn = collect(Schema::getColumns('member'))->firstWhere('name', 'buku_id');
@@ -36,7 +36,7 @@ return new class extends Migration
         }
 
         $bookForeignKeys = collect(Schema::getForeignKeys('buku'))
-            ->where('columns', ['kategori_id']);
+            ->filter(fn(array $foreignKey): bool => $foreignKey['columns'] === ['kategori_id']);
         $bookColumn = collect(Schema::getColumns('buku'))->firstWhere('name', 'kategori_id');
         $bookHasNullDelete = $bookForeignKeys->contains(
             fn(array $foreignKey): bool => strtolower((string) $foreignKey['on_delete']) === 'set null'
@@ -60,7 +60,7 @@ return new class extends Migration
     public function down(): void
     {
         $memberForeignKeys = collect(Schema::getForeignKeys('member'))
-            ->where('columns', ['buku_id']);
+            ->filter(fn(array $foreignKey): bool => $foreignKey['columns'] === ['buku_id']);
         $memberIndexes = collect(Schema::getIndexes('member'))
             ->filter(fn(array $index): bool => $index['unique'] && $index['columns'] === ['buku_id']);
 
@@ -79,7 +79,7 @@ return new class extends Migration
         });
 
         $bookForeignKeys = collect(Schema::getForeignKeys('buku'))
-            ->where('columns', ['kategori_id']);
+            ->filter(fn(array $foreignKey): bool => $foreignKey['columns'] === ['kategori_id']);
 
         Schema::table('buku', function (Blueprint $table) use ($bookForeignKeys): void {
             foreach ($bookForeignKeys as $foreignKey) {
