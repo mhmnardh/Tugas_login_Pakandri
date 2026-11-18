@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,84 +11,69 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $driver = DB::connection()->getDriverName();
+        $memberForeignKeys = collect(Schema::getForeignKeys('member'))
+            ->where('columns', ['buku_id']);
+        $memberUniqueIndex = collect(Schema::getIndexes('member'))
+            ->first(fn(array $index): bool => $index['unique'] && $index['columns'] === ['buku_id']);
 
-        if ($driver === 'sqlite') {
-            DB::statement('DROP INDEX IF EXISTS member_buku_id_unique');
-            $uniqueExists = false;
-            $foreignExists = collect(DB::select('PRAGMA foreign_key_list(member)'))
-                ->contains(fn ($foreign) => $foreign->from === 'buku_id' && $foreign->table === 'buku');
-        } else {
-            $uniqueExists = collect(DB::select(
-                "SHOW INDEX FROM member WHERE Key_name = 'member_buku_id_unique'"
-            ))->isNotEmpty();
-            $foreignExists = collect(DB::select(
-                "SELECT CONSTRAINT_NAME FROM information_schema.KEY_COLUMN_USAGE
-                 WHERE TABLE_SCHEMA = DATABASE()
-                   AND TABLE_NAME = 'member'
-                   AND COLUMN_NAME = 'buku_id'
-                   AND REFERENCED_TABLE_NAME IS NOT NULL"
-            ))->isNotEmpty();
-
-            if ($foreignExists || $uniqueExists) {
-                Schema::table('member', function (Blueprint $table) use ($foreignExists, $uniqueExists) {
-                    if ($foreignExists) {
-                        $table->dropForeign(['buku_id']);
-                    }
-
-                    if ($uniqueExists) {
-                        $table->dropUnique(['buku_id']);
-                    }
-                });
+        Schema::table('member', function (Blueprint $table) use ($memberForeignKeys, $memberUniqueIndex) {
+            foreach ($memberForeignKeys as $foreignKey) {
+                $table->dropForeign($foreignKey['name'] ?: ['buku_id']);
             }
-        }
+
+            if ($memberUniqueIndex) {
+                $table->dropUnique($memberUniqueIndex['name'] ?: ['buku_id']);
+            }
+
+            $table->unsignedBigInteger('buku_id')->nullable()->change();
+        });
 
         Schema::table('member', function (Blueprint $table) {
-            $table->unsignedBigInteger('buku_id')->nullable()->change();
             $table->foreign('buku_id')->references('id')->on('buku')->nullOnDelete();
         });
 
-        $kategoriForeignExists = DB::connection()->getDriverName() === 'sqlite'
-            || collect(DB::select(
-                "SELECT CONSTRAINT_NAME FROM information_schema.KEY_COLUMN_USAGE
-                 WHERE TABLE_SCHEMA = DATABASE()
-                   AND TABLE_NAME = 'buku'
-                   AND COLUMN_NAME = 'kategori_id'
-                   AND REFERENCED_TABLE_NAME IS NOT NULL"
-            ))->isNotEmpty();
+        $bookForeignKeys = collect(Schema::getForeignKeys('buku'))
+            ->where('columns', ['kategori_id']);
 
-        Schema::table('buku', function (Blueprint $table) use ($kategoriForeignExists) {
-            if ($kategoriForeignExists) {
-                $table->dropForeign(['kategori_id']);
+        Schema::table('buku', function (Blueprint $table) use ($bookForeignKeys) {
+            foreach ($bookForeignKeys as $foreignKey) {
+                $table->dropForeign($foreignKey['name'] ?: ['kategori_id']);
             }
 
             $table->unsignedBigInteger('kategori_id')->nullable()->change();
+        });
+
+        Schema::table('buku', function (Blueprint $table) {
             $table->foreign('kategori_id')->references('id')->on('kategori')->nullOnDelete();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('member', function (Blueprint $table) {
-            $table->dropForeign(['buku_id']);
+        $memberForeignKeys = collect(Schema::getForeignKeys('member'))
+            ->where('columns', ['buku_id']);
+
+        Schema::table('member', function (Blueprint $table) use ($memberForeignKeys) {
+            foreach ($memberForeignKeys as $foreignKey) {
+                $table->dropForeign($foreignKey['name'] ?: ['buku_id']);
+            }
+
             $table->unsignedBigInteger('buku_id')->nullable(false)->change();
         });
 
-        if (DB::connection()->getDriverName() === 'sqlite') {
-            DB::statement('DROP INDEX IF EXISTS member_buku_id_unique');
-        } else {
-            Schema::table('member', function (Blueprint $table) {
-                $table->unique('buku_id');
-            });
-        }
+        Schema::table('member', function (Blueprint $table) {
+            $table->foreign('buku_id')->references('id')->on('buku')->cascadeOnDelete();
+        });
 
-        Schema::table('buku', function (Blueprint $table) {
-            $table->dropForeign(['kategori_id']);
-            $table->unsignedBigInteger('kategori_id')->nullable(false)->change();
-            $table->foreign('kategori_id')->references('id')->on('kategori');
+        $bookForeignKeys = collect(Schema::getForeignKeys('buku'))
+            ->where('columns', ['kategori_id']);
+
+        Schema::table('buku', function (Blueprint $table) use ($bookForeignKeys) {
+            foreach ($bookForeignKeys as $foreignKey) {
+                $table->dropForeign($foreignKey['name'] ?: ['kategori_id']);
+            }
+
+            $table->unsignedBigInteger('kategori_id')->nullable()->change();
         });
     }
 };

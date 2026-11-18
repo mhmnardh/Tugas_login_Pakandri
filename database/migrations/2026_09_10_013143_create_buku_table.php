@@ -14,7 +14,7 @@ return new class extends Migration
         if (! Schema::hasTable('buku')) {
             Schema::create('buku', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('kategori_id')->nullable()->constrained('kategori')->nullOnDelete();
+                $table->unsignedBigInteger('kategori_id')->nullable();
                 $table->string('nama_buku');
                 $table->string('isbn');
                 $table->integer('stok');

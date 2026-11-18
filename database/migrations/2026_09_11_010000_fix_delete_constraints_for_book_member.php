@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,53 +11,44 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (DB::connection()->getDriverName() !== 'sqlite') {
-            $uniqueExists = collect(DB::select("SHOW INDEX FROM member WHERE Key_name = 'member_buku_id_unique'"))->isNotEmpty();
-            $foreignExists = collect(DB::select(
-                "SELECT CONSTRAINT_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'member' AND COLUMN_NAME = 'buku_id' AND REFERENCED_TABLE_NAME IS NOT NULL"
-            ))->isNotEmpty();
+        $memberForeignKeys = collect(Schema::getForeignKeys('member'))
+            ->where('columns', ['buku_id']);
+        $memberIndexes = collect(Schema::getIndexes('member'))
+            ->filter(fn(array $index): bool => $index['unique'] && $index['columns'] === ['buku_id']);
+        $memberColumn = collect(Schema::getColumns('member'))->firstWhere('name', 'buku_id');
+        $memberHasNullDelete = $memberForeignKeys->contains(
+            fn(array $foreignKey): bool => strtolower((string) $foreignKey['on_delete']) === 'set null'
+        );
 
-            if ($foreignExists) {
-                Schema::table('member', function (Blueprint $table) {
-                    $table->dropForeign(['buku_id']);
-                });
-            }
+        if (! $memberColumn['nullable'] || $memberIndexes->isNotEmpty() || ! $memberHasNullDelete) {
+            Schema::table('member', function (Blueprint $table) use ($memberForeignKeys, $memberIndexes): void {
+                foreach ($memberForeignKeys as $foreignKey) {
+                    $table->dropForeign($foreignKey['name'] ?: ['buku_id']);
+                }
 
-            if ($uniqueExists) {
-                Schema::table('member', function (Blueprint $table) {
-                    $table->dropUnique(['buku_id']);
-                });
-            }
-        }
+                foreach ($memberIndexes as $index) {
+                    $table->dropUnique($index['name']);
+                }
 
-        Schema::table('member', function (Blueprint $table) {
-            $table->unsignedBigInteger('buku_id')->nullable()->change();
-        });
-
-        if (DB::connection()->getDriverName() !== 'sqlite') {
-            Schema::table('member', function (Blueprint $table) {
+                $table->unsignedBigInteger('buku_id')->nullable()->change();
                 $table->foreign('buku_id')->references('id')->on('buku')->nullOnDelete();
             });
         }
 
-        if (DB::connection()->getDriverName() !== 'sqlite') {
-            $kategoriForeignExists = collect(DB::select(
-                "SELECT CONSTRAINT_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'buku' AND COLUMN_NAME = 'kategori_id' AND REFERENCED_TABLE_NAME IS NOT NULL"
-            ))->isNotEmpty();
+        $bookForeignKeys = collect(Schema::getForeignKeys('buku'))
+            ->where('columns', ['kategori_id']);
+        $bookColumn = collect(Schema::getColumns('buku'))->firstWhere('name', 'kategori_id');
+        $bookHasNullDelete = $bookForeignKeys->contains(
+            fn(array $foreignKey): bool => strtolower((string) $foreignKey['on_delete']) === 'set null'
+        );
 
-            if ($kategoriForeignExists) {
-                Schema::table('buku', function (Blueprint $table) {
-                    $table->dropForeign(['kategori_id']);
-                });
-            }
-        }
+        if (! $bookColumn['nullable'] || ! $bookHasNullDelete) {
+            Schema::table('buku', function (Blueprint $table) use ($bookForeignKeys): void {
+                foreach ($bookForeignKeys as $foreignKey) {
+                    $table->dropForeign($foreignKey['name'] ?: ['kategori_id']);
+                }
 
-        Schema::table('buku', function (Blueprint $table) {
-            $table->unsignedBigInteger('kategori_id')->nullable()->change();
-        });
-
-        if (DB::connection()->getDriverName() !== 'sqlite') {
-            Schema::table('buku', function (Blueprint $table) {
+                $table->unsignedBigInteger('kategori_id')->nullable()->change();
                 $table->foreign('kategori_id')->references('id')->on('kategori')->nullOnDelete();
             });
         }
@@ -69,39 +59,35 @@ return new class extends Migration
      */
     public function down(): void
     {
-        if (DB::connection()->getDriverName() !== 'sqlite') {
-            Schema::table('member', function (Blueprint $table) {
-                $table->dropForeign(['buku_id']);
-            });
-        }
+        $memberForeignKeys = collect(Schema::getForeignKeys('member'))
+            ->where('columns', ['buku_id']);
+        $memberIndexes = collect(Schema::getIndexes('member'))
+            ->filter(fn(array $index): bool => $index['unique'] && $index['columns'] === ['buku_id']);
 
-        Schema::table('member', function (Blueprint $table) {
-            $table->unsignedBigInteger('buku_id')->nullable(false)->change();
-        });
-
-        if (DB::connection()->getDriverName() !== 'sqlite') {
-            $uniqueExists = collect(DB::select("SHOW INDEX FROM member WHERE Key_name = 'member_buku_id_unique'"))->isNotEmpty();
-            if (! $uniqueExists) {
-                Schema::table('member', function (Blueprint $table) {
-                    $table->unique('buku_id');
-                });
+        Schema::table('member', function (Blueprint $table) use ($memberForeignKeys, $memberIndexes): void {
+            foreach ($memberForeignKeys as $foreignKey) {
+                $table->dropForeign($foreignKey['name'] ?: ['buku_id']);
             }
-        }
 
-        if (DB::connection()->getDriverName() !== 'sqlite') {
-            Schema::table('buku', function (Blueprint $table) {
-                $table->dropForeign(['kategori_id']);
-            });
-        }
+            $table->unsignedBigInteger('buku_id')->nullable(false)->change();
 
-        Schema::table('buku', function (Blueprint $table) {
-            $table->unsignedBigInteger('kategori_id')->nullable(false)->change();
+            if ($memberIndexes->isEmpty()) {
+                $table->unique('buku_id');
+            }
+
+            $table->foreign('buku_id')->references('id')->on('buku')->cascadeOnDelete();
         });
 
-        if (DB::connection()->getDriverName() !== 'sqlite') {
-            Schema::table('buku', function (Blueprint $table) {
-                $table->foreign('kategori_id')->references('id')->on('kategori');
-            });
-        }
+        $bookForeignKeys = collect(Schema::getForeignKeys('buku'))
+            ->where('columns', ['kategori_id']);
+
+        Schema::table('buku', function (Blueprint $table) use ($bookForeignKeys): void {
+            foreach ($bookForeignKeys as $foreignKey) {
+                $table->dropForeign($foreignKey['name'] ?: ['kategori_id']);
+            }
+
+            $table->unsignedBigInteger('kategori_id')->nullable(false)->change();
+            $table->foreign('kategori_id')->references('id')->on('kategori');
+        });
     }
 };
