@@ -1,32 +1,51 @@
-# Aturan Desain dan Palet Warna
+---
+description: "Gunakan saat membuat atau mengubah UI, warna, CSS, atau Blade di proyek perpustakaan."
+---
 
-Gunakan tema **Soft Slate**: gelap menengah, bukan hitam pekat. Pertahankan proporsi 60-30-10 untuk latar, panel, dan aksen.
+# Tema Perpustakaan Indonesia
+
+Gunakan bahasa visual landing page Home untuk semua halaman publik dan admin: hijau hutan, permukaan hijau gelap, teks krem, dan aksen emas. Jaga proporsi sekitar 60% latar, 30% permukaan, dan 10% aksen.
 
 ```css
 :root {
-    --bg-primary: #343b43;
-    --bg-secondary: #414a54;
-    --text-primary: #f1f3f5;
-    --text-secondary: #c2cad1;
-    --text-secondary-strong: #d5dce3;
-    --border-color: #56616d;
-    --accent-primary: #89aec9;
-    --accent-hover: #a3c1d5;
-    --accent-hover-strong: #b8d0e0;
-    --accent-foreground: #27333d;
-    --status-success: #9bbca3;
-    --status-danger: #d68c80;
+    --primary: #315c48;
+    --primary-dark: #102a21;
+    --cream: #18251f;
+    --gold: #c6a568;
+    --text: #e8e6dc;
+    --muted: #a6afa7;
+    --surface: #20332a;
+    --surface-light: #263b2f;
+    --border: rgba(255, 255, 255, 0.1);
 }
 ```
 
-- Gunakan `--text-secondary-strong` untuk teks kecil di panel.
-- Gunakan `--accent-foreground` pada tombol berwarna aksen.
-- Jaga rasio kontras teks normal minimal 4.5:1 dan hindari opacity rendah untuk isi teks.
-- Jangan gunakan hitam murni atau putih murni sebagai latar luas.
-- Simpan warna pada CSS variables di `resources/css/app.css`; hindari warna hardcode di Blade.
+- Gunakan emas untuk CTA, link aktif, dan aksen; jangan menjadikan emas sebagai bidang latar besar.
+- Jaga teks isi tetap kontras di atas permukaan; hindari opacity rendah untuk informasi penting.
+- Hindari hitam murni dan putih murni sebagai latar luas.
+- Gunakan Cormorant Garamond untuk judul dan Google Sans untuk isi.
+- Definisikan warna di `resources/css/app.css`; hindari hardcode warna di Blade.
 
-# Aturan Font Teks
+# Aturan Desain Perpustakaan Indonesia
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
-</style>
+Gunakan bahasa visual landing page Home untuk seluruh halaman publik dan admin: hijau hutan, permukaan hijau gelap, teks krem, dan aksen emas.
+
+```css
+:root {
+    --primary: #315c48;
+    --primary-dark: #102a21;
+    --cream: #18251f;
+    --gold: #c6a568;
+    --text: #e8e6dc;
+    --muted: #a6afa7;
+    --surface: #20332a;
+    --surface-light: #263b2f;
+    --border: rgba(255, 255, 255, 0.1);
+}
+```
+
+- Jaga teks isi tetap kontras di atas permukaan; hindari opacity rendah untuk informasi penting.
+- Gunakan emas untuk CTA, link aktif, dan aksen; jangan menjadikan emas sebagai bidang latar besar.
+- Hindari hitam murni dan putih murni sebagai latar luas.
+- Gunakan Cormorant Garamond untuk judul dan Google Sans untuk isi.
+- Definisikan warna di `resources/css/app.css`, bukan hardcode di Blade.

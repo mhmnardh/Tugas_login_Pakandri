@@ -80,9 +80,13 @@
         }
 
         .admin-main {
-            width: 100%;
+            width: auto;
             min-width: 0;
-            padding: 42px clamp(24px, 4vw, 56px) 56px;
+            margin: 24px !important;
+            padding: clamp(24px, 3vw, 44px);
+            border: 1px solid var(--admin-line);
+            border-radius: 3px;
+            background: var(--surface-light);
         }
 
         .admin-stat {
@@ -220,6 +224,8 @@
             position: relative;
             flex-wrap: wrap;
             gap: 10px 20px;
+            background: var(--primary-dark);
+            color: var(--text);
             border-bottom: 1px solid var(--admin-line);
             box-shadow: 0 2px 8px rgb(45 49 52 / 3%);
         }
@@ -251,8 +257,8 @@
             height: 34px;
             place-items: center;
             border-radius: 50%;
-            background: var(--accent-soft);
-            color: var(--admin-accent);
+            background: var(--gold);
+            color: var(--primary-dark);
             font-size: .8rem;
             font-weight: 700;
         }
@@ -276,7 +282,8 @@
             }
 
             .admin-main {
-                padding: 28px 18px 36px;
+                margin: 16px !important;
+                padding: 24px 16px 30px;
             }
 
             .admin-topbar {
@@ -334,8 +341,7 @@
         </aside>
 
         <div class="flex-grow-1">
-            <header
-                class="admin-topbar d-flex justify-content-between align-items-center bg-secondary px-4 px-lg-5 py-3">
+            <header class="admin-topbar d-flex justify-content-between align-items-center px-4 px-lg-5 py-3">
                 <span class="small text-secondary">Panel pengelolaan perpustakaan</span>
                 <span class="d-flex align-items-center gap-2 small fw-semibold">
                     <span class="admin-avatar"

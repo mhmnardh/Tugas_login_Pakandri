@@ -9,11 +9,6 @@
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <h1 class="fw-light">Daftar Kategori</h1>
                     <p class="lead text-body-secondary">Lihat kategori buku yang tersedia di perpustakaan</p>
-                    @if (!session('user_id'))
-                        <a href="{{ route('kategori.create') }}" class="btn btn-primary my-2">
-                            <i class="bi bi-plus-lg"></i> Yukk login untuk tambah Kategori Baru
-                        </a>
-                    @endif
                     @if (session('user_id'))
                         <p>
                             <a href="{{ route('kategori.create') }}" class="btn btn-primary my-2">
@@ -51,7 +46,7 @@
 
                                 <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
                                     @if (session('user_id'))
-                                        <div class="btn-group">
+                                        <div class="d-flex flex-wrap gap-2">
                                             <a href="{{ route('kategori.edit', $item->id) }}"
                                                 class="btn btn-sm btn-outline-secondary">Edit</a>
                                             <form action="{{ route('kategori.destroy', $item->id) }}" method="POST"

@@ -42,7 +42,7 @@
                                 </div>
 
                                 @if ($item->foto_buku)
-                                    <img src="{{ asset('storage' . $item->foto_buku) }}" class="card-img-top"
+                                    <img src="{{ asset('storage/' . $item->foto_buku) }}" class="card-img-top"
                                         alt="{{ $item->nama_buku }}" style="height: 225px; object-fit: cover;">
                                 @else
                                     <svg aria-label="Placeholder: Thumbnail" class="bd-placeholder-img card-img-top"
@@ -71,7 +71,7 @@
 
                                 <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
                                     @if (session('user_id'))
-                                        <div class="btn-group">
+                                        <div class="d-flex flex-wrap gap-2">
                                             <a href="{{ route('buku.edit', $item->id) }}"
                                                 class="btn btn-sm btn-outline-secondary">Edit</a>
 
