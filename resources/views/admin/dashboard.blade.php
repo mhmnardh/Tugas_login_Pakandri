@@ -9,9 +9,6 @@
             <h1 class="admin-dashboard-title display-6 mb-2">Dashboard</h1>
             <p class="text-secondary mb-0">Selamat datang kembali, {{ session('user_name', 'Administrator') }}.</p>
         </div>
-        <a href="{{ route('buku.create') }}" class="btn btn-admin-primary px-3 py-2">
-            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Tambah buku
-        </a>
     </div>
 
     <section class="row g-3 mb-5" aria-label="Statistik perpustakaan">
@@ -107,34 +104,6 @@
                 </a>
             </div>
         </div>
-        <div class="col-12 col-lg-5">
-            <h2 class="h5 fw-bold mb-1">Tambah data</h2>
-            <p class="small text-secondary mb-3">Buat catatan baru dengan cepat.</p>
-            <div class="d-grid gap-2">
-                <a href="{{ route('buku.create') }}" class="admin-shortcut">
-                    <span class="admin-action-icon" aria-hidden="true"><i class="bi bi-plus-lg"></i></span>
-                    <span><strong class="d-block">Buku baru</strong><small class="text-secondary">Daftarkan
-                            koleksi</small></span>
-                </a>
-                <a href="{{ route('kategori.create') }}" class="admin-shortcut">
-                    <span class="admin-action-icon admin-icon-category" aria-hidden="true"><i
-                            class="bi bi-plus-lg"></i></span>
-                    <span><strong class="d-block">Kategori baru</strong><small class="text-secondary">Buat kelompok
-                            koleksi</small></span>
-                </a>
-                <a href="{{ route('member.create') }}" class="admin-shortcut">
-                    <span class="admin-action-icon admin-icon-member" aria-hidden="true"><i
-                            class="bi bi-plus-lg"></i></span>
-                    <span><strong class="d-block">Member baru</strong><small class="text-secondary">Catat member dan
-                            data anggota</small></span>
-                </a>
-                <a href="{{ route('peminjaman.create') }}" class="admin-shortcut">
-                    <span class="admin-action-icon admin-icon-category" aria-hidden="true"><i
-                            class="bi bi-arrow-left-right"></i></span>
-                    <span><strong class="d-block">Peminjaman baru</strong><small class="text-secondary">Catat buku yang
-                            dipinjam</small></span>
-                </a>
-            </div>
-        </div>
+
     </section>
 @endsection

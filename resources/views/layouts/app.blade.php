@@ -146,11 +146,10 @@
 
                 <div class="col-lg-4 col-md-6">
 
-                    <h5>Kata Hari Ini</h5>
+                    <h5>Contact</h5>
 
                     <p class="footer-quote">
-                        "Membaca adalah perjalanan tanpa batas
-                        menuju dunia pengetahuan."
+                        <a href="mailto:Muhaimin@pepustakaan.com">Muhaimin@pepustakaan.com</a>
                     </p>
 
                 </div>

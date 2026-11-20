@@ -639,6 +639,34 @@ a {
    12. BOOTSTRAP BUTTON
 ========================= */
 
+.btn-primary {
+    --bs-btn-bg: var(--gold);
+    --bs-btn-border-color: var(--gold);
+    --bs-btn-color: var(--accent-foreground);
+    --bs-btn-hover-bg: var(--accent-hover);
+    --bs-btn-hover-border-color: var(--accent-hover);
+    --bs-btn-hover-color: var(--accent-foreground);
+    --bs-btn-active-bg: var(--accent-hover-strong);
+    --bs-btn-active-border-color: var(--accent-hover-strong);
+    --bs-btn-active-color: var(--accent-foreground);
+    --bs-btn-disabled-bg: var(--gold);
+    --bs-btn-disabled-border-color: var(--gold);
+    --bs-btn-disabled-color: var(--accent-foreground);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--gold);
+    --bs-btn-border-color: var(--gold);
+    --bs-btn-hover-bg: var(--gold);
+    --bs-btn-hover-border-color: var(--gold);
+    --bs-btn-hover-color: var(--accent-foreground);
+    --bs-btn-active-bg: var(--accent-hover);
+    --bs-btn-active-border-color: var(--accent-hover);
+    --bs-btn-active-color: var(--accent-foreground);
+    --bs-btn-disabled-color: var(--gold);
+    --bs-btn-disabled-border-color: var(--gold);
+}
+
 .btn-success {
     background: var(--primary);
     border-color: var(--primary);
